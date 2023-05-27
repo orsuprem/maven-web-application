@@ -1,0 +1,26 @@
+//github checkout
+node{
+def mavenHome= tool name: "maven3.9.2"
+stage('checkout code'){
+git credentialsId: '3b473705-e162-442e-b3f7-37f1ce438dd9', url: 'https://github.com/orsuprem/maven-web-application.git'
+}
+//maven build
+stage('Build'){
+sh "$mavenHome/bin/mvn clean package"
+}
+//sonarqube report
+stage('sonarqube reporting'){
+sh "$mavenHome/bin/mvn sonar:sonar"
+}
+//upload artifact in repoistory
+stage('uploadingArtifactInTo Nexus'){
+sh "$mavenHome/bin/mvn help:effective-settings help:effective-pom clean deploy"
+}
+//Deploy artifact into Tomcat
+stage('DeployArtifactInToTomcat'){
+sshagent(['94d47873-d789-4688-b070-753c263df8f3']) {
+sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war  ubuntu@16.170.228.15:/opt/tomcat/webapps"
+}
+}
+    
+}
