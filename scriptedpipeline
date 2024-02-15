@@ -22,7 +22,7 @@ sh "$mavenHome/bin/mvn help:effective-settings help:effective-pom clean deploy"
 //Deploy artifact into Tomcat
 stage('DeployArtifactInToTomcat'){
 sshagent(['dd59c6eb-1e35-424e-b1b3-afb127700bd7']) {
-sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war  ubuntu@http://13.235.134.117/:/opt/tomcat/webapps"
+sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war  ubuntu@13.235.134.117:/opt/tomcat/webapps"
 }
 }
     
